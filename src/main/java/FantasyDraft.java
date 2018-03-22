@@ -23,7 +23,7 @@ public class FantasyDraft {
         fantasy.draftTeam();
     }
 
-
+    // Print out list of current teams in DB
     private void getTeamList() throws Exception {
         Connection connection = createConnection();
         statement = connection.createStatement();
@@ -35,9 +35,9 @@ public class FantasyDraft {
             for (Team t : teams) {
                 System.out.println(t.toString());
             }
-        connection.close();
+        closeConnection(connection);
     }
-
+    // Print out list of current players in DB
     private void getPlayerList() throws Exception {
         Connection connection = createConnection();
         statement = connection.createStatement();
@@ -49,7 +49,7 @@ public class FantasyDraft {
         for (Player p : players) {
             System.out.println(p.toString());
         }
-        connection.close();
+        closeConnection(connection);
     }
 
     // adds team to the DB
@@ -72,7 +72,7 @@ public class FantasyDraft {
             System.out.println(t.toString());
         }
 
-        connection.close();
+        closeConnection(connection);
     }
 
     // overloaded method deletes every instance of a team by team name
@@ -92,7 +92,7 @@ public class FantasyDraft {
             System.out.println(t.toString());
         }
 
-        connection.close();
+        closeConnection(connection);
     }
 
     // Overloaded method deletes one instance of a team by teamID number
@@ -112,7 +112,7 @@ public class FantasyDraft {
             System.out.println(t.toString());
         }
 
-        connection.close();
+        closeConnection(connection);
     }
 
     // adds new player to the DB
@@ -137,7 +137,7 @@ public class FantasyDraft {
             System.out.println(p.toString());
         }
 
-        connection.close();
+        closeConnection(connection);
     }
 
     // Overloaded method deletes every instance of a player by first and last name
@@ -158,7 +158,7 @@ public class FantasyDraft {
             System.out.println(p.toString());
         }
 
-        connection.close();
+        closeConnection(connection);
     }
 
     // Overloaded method deletes one instance of a player by playerID number
@@ -178,7 +178,7 @@ public class FantasyDraft {
             System.out.println(p.toString());
         }
 
-        connection.close();
+        closeConnection(connection);
     }
 
     // adds team to the DB
@@ -201,7 +201,7 @@ public class FantasyDraft {
 //            System.out.println(pt.toString());
 //        }
 
-        connection.close();
+        closeConnection(connection);
     }
 
     // adds team to the DB
@@ -271,7 +271,7 @@ public class FantasyDraft {
         return retList;
     }
 
-
+    // Creates connection to MySQL DB, for start of each db connected method
     public Connection createConnection() throws Exception {
         Connection connection;
 
@@ -286,6 +286,7 @@ public class FantasyDraft {
         }
     }
 
+    // Closes connection, needs to be at the end of each db connected method to avoid memory leak
     public void closeConnection(Connection connection) {
         try {
             connection.close();
