@@ -30,6 +30,6 @@ public class Teams {
 
     @Override
     public String toString() {
-        return "Team Info: " + getLocation() + " " + getTeamName() + " (id = " + getTeamID() + ")";
+        return "Team: " + getLocation() + " " + getTeamName() + " (id = " + getTeamID() + ")";
     }
 }

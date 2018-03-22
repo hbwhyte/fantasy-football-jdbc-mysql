@@ -40,6 +40,6 @@ public class Players {
     @Override
     public String toString() {
         return "Player Info: " + getFirstName() + " " + getLastName() + ", " +
-                getPosition() + "(id = " + getPlayerID() + ")";
+                getPosition() + " (id = " + getPlayerID() + ")";
     }
 }
