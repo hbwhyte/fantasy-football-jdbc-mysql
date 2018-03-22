@@ -9,8 +9,8 @@ public class FantasyDraft {
 
     public static void main(String[] args) throws Exception {
         FantasyDraft fantasy = new FantasyDraft();
-        fantasy.readDatabase("teams");
-        fantasy.readDatabase("players");
+        fantasy.getTeamList();
+        fantasy.getPlayerList();
 
         // Optional add/delete methods
         //fantasy.addTeam("Seattle","Seahawks");
@@ -19,31 +19,35 @@ public class FantasyDraft {
         //fantasy.deletePlayer(13); // by player ID or first and last name
         //fantasy.matchPlayer(10,22); // Matches Dan Bailey to the Denver Broncos
 
-        // Team draft
+        // Team draft of only matched players
         fantasy.draftTeam();
     }
 
 
-    private void readDatabase(String dbName) throws Exception {
+    private void getTeamList() throws Exception {
         Connection connection = createConnection();
         statement = connection.createStatement();
 
-        resultSet = statement.executeQuery("select * from " + dbName + ";");
-
-        if (dbName == "teams") {
+        resultSet = statement.executeQuery("select * from teams ;");
             ArrayList<Team> teams = mapTeamsToObjects(resultSet);
 
             System.out.println("\nALL TEAMS");
             for (Team t : teams) {
                 System.out.println(t.toString());
             }
-        } else {
-            ArrayList<Player> players = mapPlayersToObjects(resultSet);
+        connection.close();
+    }
 
-            System.out.println("\nALL PLAYERS");
-            for (Player p : players) {
-                System.out.println(p.toString());
-            }
+    private void getPlayerList() throws Exception {
+        Connection connection = createConnection();
+        statement = connection.createStatement();
+        resultSet = statement.executeQuery("select * from players ;");
+
+        ArrayList<Player> players = mapPlayersToObjects(resultSet);
+
+        System.out.println("\nALL PLAYERS");
+        for (Player p : players) {
+            System.out.println(p.toString());
         }
         connection.close();
     }
