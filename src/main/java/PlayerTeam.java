@@ -1,4 +1,4 @@
-public class PlayersTeams {
+public class PlayerTeam {
 
     private int id; // might not need.
     private String firstName;
@@ -58,6 +58,6 @@ public class PlayersTeams {
     @Override
     public String toString() {
         return getFirstName() + " " + getLastName() + " from the " +
-                getLocation() + " " + getTeamName() + " is my " + getPosition();
+                getLocation() + " " + getTeamName() + " as " + getPosition();
     }
 }

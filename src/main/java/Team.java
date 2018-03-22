@@ -1,4 +1,4 @@
-public class Teams {
+public class Team {
 
     private int teamID;
     private String location;
@@ -30,6 +30,6 @@ public class Teams {
 
     @Override
     public String toString() {
-        return "Team: " + getLocation() + " " + getTeamName() + " (id = " + getTeamID() + ")";
+        return getLocation() + " " + getTeamName() + " (id = " + getTeamID() + ")";
     }
 }

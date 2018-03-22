@@ -1,4 +1,4 @@
-public class Players {
+public class Player {
 
     private int playerID;
     private String firstName;
@@ -39,7 +39,7 @@ public class Players {
 
     @Override
     public String toString() {
-        return "Player Info: " + getFirstName() + " " + getLastName() + ", " +
+        return getFirstName() + " " + getLastName() + ", " +
                 getPosition() + " (id = " + getPlayerID() + ")";
     }
 }
