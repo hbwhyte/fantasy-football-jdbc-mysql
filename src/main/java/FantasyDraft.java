@@ -1,3 +1,7 @@
+import model.Player;
+import model.PlayerTeam;
+import model.Team;
+
 import java.sql.*;
 import java.util.ArrayList;
 
@@ -7,43 +11,77 @@ public class FantasyDraft {
     private PreparedStatement preparedStatement = null;
     private ResultSet resultSet = null;
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
         FantasyDraft fantasy = new FantasyDraft();
-        fantasy.getTeamList();
-        fantasy.getPlayerList();
+        Connection connection = null;
+        try {
+            connection = fantasy.createConnection();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        fantasy.getTeamList(connection);
+        fantasy.getPlayerList(connection);
 
         // Optional add/delete methods
-        //fantasy.addTeam("Seattle","Seahawks");
-        //fantasy.deleteTeam(32); // by team ID or team name
-        //fantasy.addPlayer("Doug","Baldwin", "Wide Receiver");
-        //fantasy.deletePlayer(13); // by player ID or first and last name
-        //fantasy.matchPlayer(10,22); // Matches Dan Bailey to the Denver Broncos
+
+//        try {
+//            fantasy.addTeam("Seattle","Seahawks");
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        try {
+//            fantasy.deleteTeam(32); // by team ID or team name
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        try {
+//            fantasy.addPlayer("Doug","Baldwin", "Wide Receiver");
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        try {
+//            fantasy.deletePlayer(13); // by player ID or first and last name
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        try {
+//            fantasy.matchPlayer(10,22); // Matches Dan Bailey to the Denver Broncos
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
 
         // Team draft of only matched players
-        fantasy.draftTeam();
+        fantasy.draftTeam(connection);
     }
 
     // Print out list of current teams in DB
-    private void getTeamList() throws Exception {
-        Connection connection = createConnection();
-        statement = connection.createStatement();
+    private void getTeamList(Connection connection) {
+        ArrayList<Team> teams = null;
+        try {
+            statement = connection.createStatement();
+            resultSet = statement.executeQuery("select * from teams ;");
+            teams = mapTeamsToObjects(resultSet);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
-        resultSet = statement.executeQuery("select * from teams ;");
-            ArrayList<Team> teams = mapTeamsToObjects(resultSet);
-
-            System.out.println("\nALL TEAMS");
-            for (Team t : teams) {
-                System.out.println(t.toString());
-            }
+        System.out.println("\nALL TEAMS");
+        for (Team t : teams) {
+            System.out.println(t.toString());
+        }
         closeConnection(connection);
     }
-    // Print out list of current players in DB
-    private void getPlayerList() throws Exception {
-        Connection connection = createConnection();
-        statement = connection.createStatement();
-        resultSet = statement.executeQuery("select * from players ;");
 
-        ArrayList<Player> players = mapPlayersToObjects(resultSet);
+    // Print out list of current players in DB
+    private void getPlayerList(Connection connection) {
+        ArrayList<Player> players = null;
+        try {
+            statement = connection.createStatement();
+            resultSet = statement.executeQuery("select * from players ;");
+            players = mapPlayersToObjects(resultSet);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
         System.out.println("\nALL PLAYERS");
         for (Player p : players) {
@@ -205,20 +243,22 @@ public class FantasyDraft {
     }
 
     // adds team to the DB
-    private void draftTeam() throws Exception {
-        Connection connection = createConnection();
-        statement = connection.createStatement();
+    private void draftTeam(Connection connection){
+        ArrayList<PlayerTeam> playerTeam = null;
+        try {
+            statement = connection.createStatement();
+            resultSet = statement.executeQuery
+                    ("SELECT p.f_name, p.l_name, p.position, t.location, t.name as team_name " +
+                            "FROM players p " +
+                            "JOIN players_teams pt " +
+                            "ON p.id = pt.player_id " +
+                            "JOIN teams t " +
+                            "ON t.id = pt.team_id;");
 
-        resultSet = statement.executeQuery
-                ("SELECT p.f_name, p.l_name, p.position, t.location, t.name as team_name " +
-                        "FROM players p " +
-                        "JOIN players_teams pt " +
-                        "ON p.id = pt.player_id " +
-                        "JOIN teams t " +
-                        "ON t.id = pt.team_id;");
-
-        ArrayList<PlayerTeam> playerTeam = mapPlayersTeamsToObjects(resultSet);
-
+            playerTeam = mapPlayersTeamsToObjects(resultSet);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         System.out.println("\nMY DRAFT");
         for (PlayerTeam pt : playerTeam) {
             System.out.println(pt.toString());
@@ -282,7 +322,7 @@ public class FantasyDraft {
                     "user=root&password=&useSSL=false");
             return connection;
         } catch (Exception e) {
-            throw e;
+            throw new Exception();
         }
     }
 

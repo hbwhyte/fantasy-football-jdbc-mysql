@@ -1,3 +1,5 @@
+package model;
+
 public class Team {
 
     private int teamID;

@@ -1,3 +1,5 @@
+package model;
+
 public class PlayerTeam {
 
     private int id; // might not need.
